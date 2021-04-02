@@ -20,10 +20,16 @@ waze:-
     b_setval(lista_recorridos, []),
     nl,
     read(X),
-    confirmar_destino(X).
+    split_string(X, " ", "", L),
+    write(L),
+    nl,
+    obtener_ciudad(L, C),
+    write(C),
+    nl,
+    confirmar_destino(C).
 
 % Confimación del destino, is no se reconoce la ciudad entonces se devuelve a la regla waze.
-confirmar_destino(Destiny):- 
+confirmar_destino(Destiny):-
     ciudad(Destiny),
     b_setval(destiny, Destiny),
     waze_from, 
@@ -38,7 +44,13 @@ waze_from:-
     write("Por favor indique el lugar donde empieza el viaje: "),
     nl,
     read(X),
-    confirmar_partida(X).
+    split_string(X, " ", "", L),
+    write(L),
+    nl,
+    obtener_ciudad(L, C),
+    write(C),
+    nl,
+    confirmar_partida(C).
 
 % Reglas de confirmación de partida.
 % Determinan si el lugar de partida es válido, si no entonces 
@@ -60,7 +72,9 @@ waze_intermediate:-
     write("Algun (otro) destino intermedio?"),
     nl,
     read(X),
-    confirmar_respuesta(X).
+    split_string(X, " ", "", L),
+    obtener_respuesta(L, C),
+    confirmar_respuesta(C).
 
 % Reglas de confirmación de respuesta
 % Determinan si el usuario tiene destinos intermedios.
@@ -69,7 +83,12 @@ confirmar_respuesta(Respuesta):-
     write("Cual es el detino intermedio?"),
     nl,
     read(X),
-    confirmar_intermedio(X),
+    split_string(X, " ", "", L),
+    write(L),
+    obtener_ciudad(L, C),
+    write(C),
+    nl,
+    confirmar_intermedio(C),
     !.
 
 confirmar_respuesta(Respuesta):-
@@ -109,3 +128,12 @@ waze_final:-
     write(Result).
 
 
+obtener_ciudad([X|List], C):- ciudad(C), C==X, !.
+obtener_ciudad([], "null").
+obtener_ciudad([X|List], C):- 
+    obtener_ciudad(List, C).
+
+obtener_respuesta(List, Respuesta):- afirmativo(Respuesta).
+obtener_respuesta(List, Respuesta):- negativo(Respuesta).
+obtener_respuesta([], "").
+obtener_respuesta([_|List], Respuesta):- obtener_respuesta(List, _).
