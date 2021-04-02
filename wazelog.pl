@@ -1,15 +1,19 @@
-% Definimos las ciudades del grafo
+% Definimos las ciudades del grafo (estos valores se cambiarán luego).
 ciudad(cartago).
 ciudad(san_jose).
 ciudad(heredia).
 ciudad(alajuela).
+
+% definimos las posibles respuestas afirmativas.
 afirmativo(si).
 afirmativo(sí).
 afirmativo(yes).
 
+% posibles respuestas negativas.
 negativo(no).
 negativo(none).
 
+% inicio de la aplicación, da la bienvenida al jugador y le pregunta por su destino.
 waze:-
     write("Por favor indique el lugar al que se dirige: "),
     b_setval(lista_intermedios, []),
@@ -18,6 +22,7 @@ waze:-
     read(X),
     confirmar_destino(X).
 
+% Confimación del destino, is no se reconoce la ciudad entonces se devuelve a la regla waze.
 confirmar_destino(Destiny):- 
     ciudad(Destiny),
     b_setval(destiny, Destiny),
@@ -28,13 +33,16 @@ confirmar_destino(Destiny):-
     nl,
     waze.
 
+% Regla que pregunta el lugar donde inicia el viaje.
 waze_from:-
-    %b_getval(destiny, V),
     write("Por favor indique el lugar donde empieza el viaje: "),
     nl,
     read(X),
     confirmar_partida(X).
 
+% Reglas de confirmación de partida.
+% Determinan si el lugar de partida es válido, si no entonces 
+% vuelve a preguntar desde la regla waze_from.
 confirmar_partida(Partida):-
     ciudad(Partida),
     b_setval(partida, Partida),
@@ -46,12 +54,16 @@ confirmar_partida(Partida):-
     nl,
     waze_from.
 
+% Regla de los lugares intermedios
+% Le pregunta al usuario si tiene algún destino intermedio.
 waze_intermediate:-
     write("Algun (otro) destino intermedio?"),
     nl,
     read(X),
     confirmar_respuesta(X).
 
+% Reglas de confirmación de respuesta
+% Determinan si el usuario tiene destinos intermedios.
 confirmar_respuesta(Respuesta):-
     afirmativo(Respuesta),
     write("Cual es el detino intermedio?"),
@@ -65,8 +77,13 @@ confirmar_respuesta(Respuesta):-
     waze_final,
     !.
 
-confirmar_respuesta(Respuesta):- waze_intermediate.
+confirmar_respuesta(Respuesta):-
+    write("Por favor responda si o no."),
+    nl,
+    waze_intermediate.
 
+% Reglas de confirmación del destino intermedio.
+% Definen si el detino ingresado existe o no.
 confirmar_intermedio(Inter):-
     ciudad(Inter),
     b_getval(lista_intermedios, L),
@@ -79,7 +96,9 @@ confirmar_intermedio(Inter):-
     write("Lo sentimos su lugar intermedio no existe: "),
     nl,
     waze_intermediate.
-    
+
+% Regla final del programa.
+% Se crea la lista ruta que el usuario determinó.
 waze_final:-
     b_getval(destiny, Destiny),
     b_getval(partida, Partida),
