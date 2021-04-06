@@ -1,0 +1,19 @@
+edge(a,b,1).
+edge(b,e,2).
+edge(a,c,3).
+edge(c,d,2).
+edge(e,d,3).
+edge(d,f,2).
+edge(d,g,3).
+
+
+
+findPath(X, Y) :- findPathAux(X, Y, _, _, []).
+
+
+findPathAux(X, Y, W, [X,Y], _) :- edge(X, Y, W).
+findPathAux(X, Y, W, [X|P], V) :- \+ member(X, V),
+                                 edge(X, Z, W1),
+                                 findapath(Z, Y, W2, P, [X|V]),
+                                 W is W1 + W2.
+
