@@ -1,5 +1,5 @@
-% Definición de los arcos, tiempos y tiempos en presa que
-% representan el grafo. SE CMBIARAN A FUTURO.
+% Definición de los arcos, tiempos y tiempos en presa que representan el
+% grafo. SE CMBIARAN A FUTURO.
 
 
 % arco(lugar1, lugar2, distancia en Km).
@@ -67,48 +67,44 @@ tiempoPresa(alajuela, sanJose, 160).
 tiempoPresa(alajuela, limon, 300).
 
 
-% Nombre: Conexión.
-% Descripción: retorna true si la conexión entre los nodos recibidos
-%              existe y false en caso contrario.
-% Entradas: dos caracteres.
-% Salidas: un booleano.
-conexion(Nodol, Nodo2) :- arco(Nodo1, Nodo2, _), !.
-conexion(Nodol, Nodo2) :- arco(Nodo2, Nodo1, _).
-
-
-
-
-
-% Nombre: Camino.
-% Descripción: retorna el camino que se debe seguir para llegar al
-%              fin saliendo del inicia.
-% Entradas: dos caracteres.
+% Nombre: Concatenar.
+% Descripción: retorna una sola lista con cada uno de los elementos
+%              de las dos lista recibidads.
+% Entradas: dos listas.
 % Salidas: una lista.
-
-% camino(Inicio, Fin) :- caminoAux(Inicio, Fin, []).
-
-% caminoAux(Inicio, Fin, [Inicio, X, Fin]) :- conexion(Inicio, X),
-  %                                           conexion(X, Fin),
-    %                                         X \= Inicio.
-
-% caminoAux(Inicio, Fin, Camino) :- conexion(Inicio, X),
-  %                                 conexion(X, Fin).
+concatenar([], Lista, Lista).
+concatenar([Cabeza|Lista1], Lista2, [Cabeza|Lista3]) :- concatenar(Lista1, Lista2, Lista3).
 
 
+% Nombre: Ruta.
+% Descripción: retorna una posible ruta entre los dos lugares recibidos.
+% Entradas: dos caracteres, dos variables.
+% Salidas: un entero y una lista.
+ruta(Inicio, Fin, Distancia, Camino) :- ruta(Inicio, Fin, Distancia, [], Camino).
+
+ruta(Inicio, Fin, Distancia, Visitados, [Inicio]) :-
+                     \+ memberchk(Inicio, Visitados),
+                     arco(Inicio, Fin, Distancia).
+
+ruta(Inicio, Intermedio, Distancia, Visitados, [Inicio|Cola]) :-
+                     \+ memberchk(Inicio, Visitados),
+                     arco(Inicio, Fin, Distancia1),
+                     ruta(Fin, Intermedio, Distancia2, [Inicio|Visitados], Cola),
+                     \+ memberchk(Inicio, Cola),
+                     Distancia is Distancia1 + Distancia2.
 
 
+% Nombre: Ruta Más Corta.
+% Descripción: retorna la ruta ruta más corta entre los dos lugares
+%              recibidos.
+% Entradas: dos caracteres y dos variables.
+% Salidas: un entero y una lista.
+rutaMasCorta(Inicio, Fin, Costo, Camino) :- rutaMasCorta(Inicio, Fin, Costo, _, Camino).
 
-
-
-miembro(Head, [Head|_]).
-miembro(Head, [_|Tail]):- miembro(Head, Tail).
-
-
-
-
-camino(Inicio,Fin) :- recorrer(Inicio,Fin,[]).
-
-recorrer(Inicio,Fin,Visitados) :- arco(Inicio,Intermedio),
-                                  not(miembro(Intermedio,Visitados)),
-                                  (Fin = Intermedio ;
-                                  recorrer(Intermedio,Fin,[Inicio|Intermedio])).
+rutaMasCorta(Inicio, Fin, CostoMinimo, Camino, CaminoFinal) :-
+                                    ruta(Inicio, Fin, CostoMinimo, Camino),
+                                    \+ (ruta(Inicio, Fin, CostoBajo, OtroCamino),
+                                    OtroCamino \= Camino,
+                                    CostoBajo =< CostoMinimo),
+                                    concatenar(Camino, [Fin], ListaConcatenada),
+                                    CaminoFinal = ListaConcatenada.
