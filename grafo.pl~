@@ -1,74 +1,158 @@
-% Definición de los arcos, tiempos y tiempos en presa que representan el
-% grafo. SE CMBIARAN A FUTURO.
-
+% Definicion de los arcos, tiempos y tiempos en presa que representan el
+% grafo.
 
 % arco(lugar1, lugar2, distancia en Km).
-arco(sanJose, heredia, 30).
-arco(sanJose, alajuela, 40).
-arco(sanJose, cartago, 15).
-arco(sanJose, limon, 25).
+arco(sanJose, cartago, 20).
+arco(sanJose, corralillo, 22).
 
-arco(cartago, sanJose, 15).
-arco(cartago, limon, 20).
+arco(tresRios, sanJose, 8).
+arco(tresRios, pacayas, 15).
 
-arco(limon, sanJose, 25).
-arco(limon, cartago, 20).
-arco(limon, alajuela, 35).
+arco(cartago, sanJose, 20).
+arco(cartago, tresRios, 8).
+arco(cartago, musgoVerde, 10).
+arco(cartago, pacayas, 13).
+arco(cartago, paraiso, 10).
 
-arco(heredia, sanJose, 30).
-arco(heredia, alajuela, 10).
+arco(pacayas, tresRios, 15).
+arco(pacayas, cartago, 13).
+arco(pacayas, cervantes, 8).
 
-arco(alajuela, heredia, 10).
-arco(alajuela, sanJose, 40).
-arco(alajuela, limon, 35).
+arco(corralillo, sanJose, 22).
+arco(corralillo, musgoVerde, 6).
+
+arco(musgoVerde, corralillo, 6).
+arco(musgoVerde, cartago, 10).
+
+arco(cervantes, pacayas, 8).
+arco(cervantes, cachi, 7).
+arco(cervantes, juanViñas, 5).
+
+arco(paraiso, cervantes, 4).
+arco(paraiso, cachi, 10).
+arco(paraiso, orosi, 8).
+
+arco(cachi, paraiso, 10).
+arco(cachi, orosi, 12).
+arco(cachi, cervantes, 7).
+arco(cachi, turrialba, 40).
+
+arco(orosi, paraiso, 8).
+arco(orosi, cachi, 12).
+
+arco(juanViñas, turrialba, 4).
+
+arco(turrialba, cachi, 40).
+arco(turrialba, pacayas, 18).
 
 
-% Definición de los tiempos estimados.
+% Definicion de los tiempos estimados.
 % tiempo(lugar1, lugar2, tiempo en minutos).
-tiempo(sanJose, heredia, 60).
-tiempo(sanJose, alajuela, 80).
-tiempo(sanJose, cartago, 40).
-tiempo(sanJose, limon, 120).
+tiempo(sanJose, cartago, 20).
+tiempo(sanJose, corralillo, 22).
 
-tiempo(cartago, sanJose, 40).
-tiempo(cartago, limon, 70).
+tiempo(tresRios, sanJose, 8).
+tiempo(tresRios, pacayas, 15).
 
-tiempo(limon, sanJose, 120).
-tiempo(limon, cartago, 70).
-tiempo(limon, alajuela, 150).
+tiempo(cartago, sanJose, 20).
+tiempo(cartago, tresRios, 8).
+tiempo(cartago, musgoVerde, 10).
+tiempo(cartago, pacayas, 13).
+tiempo(cartago, paraiso, 10).
 
-tiempo(heredia, sanJose, 60).
-tiempo(heredia, alajuela, 45).
+tiempo(pacayas, tresRios, 15).
+tiempo(pacayas, cartago, 13).
+tiempo(pacayas, cervantes, 8).
 
-tiempo(alajuela, heredia, 45).
-tiempo(alajuela, sanJose, 80).
-tiempo(alajuela, limon, 150).
+tiempo(corralillo, sanJose, 22).
+tiempo(corralillo, musgoVerde, 6).
+
+tiempo(musgoVerde, corralillo, 6).
+tiempo(musgoVerde, cartago, 10).
+
+tiempo(cervantes, pacayas, 8).
+tiempo(cervantes, cachi, 7).
+tiempo(cervantes, juanViñas, 5).
+
+tiempo(paraiso, cervantes, 4).
+tiempo(paraiso, cachi, 10).
+tiempo(paraiso, orosi, 8).
+
+tiempo(cachi, paraiso, 10).
+tiempo(cachi, orosi, 12).
+tiempo(cachi, cervantes, 7).
+tiempo(cachi, turrialba, 40).
+
+tiempo(orosi, paraiso, 8).
+tiempo(orosi, cachi, 12).
+
+tiempo(juanViñas, turrialba, 4).
+
+tiempo(turrialba, cachi, 40).
+tiempo(turrialba, pacayas, 18).
 
 
-% Definición de los tiempos estimados en presas.
+
+
+
+
+
+
+
+
+
+
+
+
+
+% Definicion de los tiempos estimados en presas.
 % tiempoPresa(lugar1, lugar2, tiempo en minutos).
-tiempoPresa(sanJose, heredia, 120).
-tiempoPresa(sanJose, alajuela, 160).
-tiempoPresa(sanJose, cartago, 80).
-tiempoPresa(sanJose, limon, 240).
+tiempoPresa(sanJose, cartago, 40).
+tiempoPresa(sanJose, corralillo, 44).
 
-tiempoPresa(cartago, sanJose, 80).
-tiempoPresa(cartago, limon, 140).
+tiempoPresa(tresRios, sanJose, 16).
+tiempoPresa(tresRios, pacayas, 30).
 
-tiempoPresa(limon, sanJose, 240).
-tiempoPresa(limon, cartago, 140).
-tiempoPresa(limon, alajuela, 300).
+tiempoPresa(cartago, sanJose, 40).
+tiempoPresa(cartago, tresRios, 16).
+tiempoPresa(cartago, musgoVerde, 20).
+tiempoPresa(cartago, pacayas, 26).
+tiempoPresa(cartago, paraiso, 20).
 
-tiempoPresa(heredia, sanJose, 120).
-tiempoPresa(heredia, alajuela, 90).
+tiempoPresa(pacayas, tresRios, 30).
+tiempoPresa(pacayas, cartago, 26).
+tiempoPresa(pacayas, cervantes, 16).
 
-tiempoPresa(alajuela, heredia, 90).
-tiempoPresa(alajuela, sanJose, 160).
-tiempoPresa(alajuela, limon, 300).
+tiempoPresa(corralillo, sanJose, 44).
+tiempoPresa(corralillo, musgoVerde, 12).
+
+tiempoPresa(musgoVerde, corralillo, 12).
+tiempoPresa(musgoVerde, cartago, 20).
+
+tiempoPresa(cervantes, pacayas, 16).
+tiempoPresa(cervantes, cachi, 14).
+tiempoPresa(cervantes, juanViñas, 10).
+
+tiempoPresa(paraiso, cervantes, 8).
+tiempoPresa(paraiso, cachi, 20).
+tiempoPresa(paraiso, orosi, 16).
+
+tiempoPresa(cachi, paraiso, 20).
+tiempoPresa(cachi, orosi, 24).
+tiempoPresa(cachi, cervantes, 14).
+tiempoPresa(cachi, turrialba, 80).
+
+tiempoPresa(orosi, paraiso, 16).
+tiempoPresa(orosi, cachi, 24).
+
+tiempoPresa(juanViñas, turrialba, 8).
+
+tiempoPresa(turrialba, cachi, 80).
+tiempoPresa(turrialba, pacayas, 36).
 
 
 % Nombre: Concatenar.
-% Descripción: retorna una sola lista con cada uno de los elementos
+% Descripcion: retorna una sola lista con cada uno de los elementos
 %              de las dos lista recibidads.
 % Entradas: dos listas.
 % Salidas: una lista.
@@ -77,7 +161,7 @@ concatenar([Cabeza|Lista1], Lista2, [Cabeza|Lista3]) :- concatenar(Lista1, Lista
 
 
 % Nombre: Ruta.
-% Descripción: retorna una posible ruta entre los dos lugares recibidos.
+% Descripcion: retorna una posible ruta entre los dos lugares recibidos.
 % Entradas: dos caracteres, dos variables.
 % Salidas: un entero y una lista.
 ruta(Inicio, Fin, Distancia, Camino) :- ruta(Inicio, Fin, Distancia, [], Camino).
@@ -94,8 +178,8 @@ ruta(Inicio, Intermedio, Distancia, Visitados, [Inicio|Cola]) :-
                      Distancia is Distancia1 + Distancia2.
 
 
-% Nombre: Ruta Más Corta.
-% Descripción: retorna la ruta ruta más corta entre los dos lugares
+% Nombre: Ruta Mas Corta.
+% Descripcion: retorna la ruta ruta mas corta entre los dos lugares
 %              recibidos.
 % Entradas: dos caracteres y dos variables.
 % Salidas: un entero y una lista.
@@ -110,33 +194,40 @@ rutaMasCorta(Inicio, Fin, CostoMinimo, Camino, CaminoFinal) :-
                                     CaminoFinal = ListaConcatenada.
 
 
+% Nombre: Longitud (Función auxiliar)
+% Descripcion: Determina la longitud de una lista.
+% Entradas: Una lista.
+% Salidas: a longitud de esta lista.
+longitud([], 0).
+
+longitud([_|L], Val):- longitud(L, Val1),
+                       Val is Val1+1.
 
 
+% Nombre: Calcular Tiempo
+% Descripcion: retorna el tiempo que tarda una ruta especifica.
+% Entradas: Una lista que representa el recorrido.
+% Salidas: Un entero que representa el tiempo que tardará el
+%          recorrido sin presas.
+calcularTiempo(L, 0) :- longitud(L, 1).
 
-
-
-longitud1([], 0).
-longitud1([_|Tail], Cantidad):- longitud1(Tail, Suma), Cantidad is Suma + 1.
-
-
-
-
-
-
-
-
-
-
-cacularTiempo([Cabeza|Cola], Tiempo) :- calcularTiempo(Cabeza, Cola, Tiempo).
+calcularTiempo([Cabeza|Cola], Tiempo) :- calcularTiempo(Cabeza, Cola, Tiempo).
 
 calcularTiempo(Cabeza1, [Cabeza2|Cola], Tiempo) :-
-                                 tiempo(Cabeza1, Cabeza2, Duracion),
-                                 Suma = Tiempo + Duracion,
-                                 calcularTiempo(Cabeza2, Cola, Suma).
+                                         tiempo(Cabeza1, Cabeza2, Duracion),
+                                         calcularTiempo([Cabeza2|Cola], Suma),
+                                         Tiempo is Suma + Duracion.
 
+% Nombre: Calcular Tiempo Presas.
+% Descripcion: retorna el tiempo que tarda una ruta especifica con presas.
+% Entradas: Una lista que representa el recorrido.
+% Salidas: Un entero que representa el tiempo que tardará el
+%          recorrido con presas.
+calcularTiempoPresas(L, 0) :- longitud(L, 1).
 
+calcularTiempoPresas([Cabeza|Cola], Tiempo) :- calcularTiempoPresas(Cabeza, Cola, Tiempo).
 
-
-
-
-
+calcularTiempoPresas(Cabeza1, [Cabeza2|Cola], Tiempo) :-
+                                               tiempoPresa(Cabeza1, Cabeza2, Duracion),
+                                               calcularTiempoPresas([Cabeza2|Cola], Suma),
+                                               Tiempo is Suma + Duracion.
