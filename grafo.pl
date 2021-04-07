@@ -1,4 +1,4 @@
-% Definición de los arcos, tiempos y tiempos en presa que representan el
+% Definicion de los arcos, tiempos y tiempos en presa que representan el
 % grafo. SE CMBIARAN A FUTURO.
 
 
@@ -23,7 +23,7 @@ arco(alajuela, sanJose, 40).
 arco(alajuela, limon, 35).
 
 
-% Definición de los tiempos estimados.
+% Definicion de los tiempos estimados.
 % tiempo(lugar1, lugar2, tiempo en minutos).
 tiempo(sanJose, heredia, 60).
 tiempo(sanJose, alajuela, 80).
@@ -45,7 +45,7 @@ tiempo(alajuela, sanJose, 80).
 tiempo(alajuela, limon, 150).
 
 
-% Definición de los tiempos estimados en presas.
+% Definicion de los tiempos estimados en presas.
 % tiempoPresa(lugar1, lugar2, tiempo en minutos).
 tiempoPresa(sanJose, heredia, 120).
 tiempoPresa(sanJose, alajuela, 160).
@@ -68,7 +68,7 @@ tiempoPresa(alajuela, limon, 300).
 
 
 % Nombre: Concatenar.
-% Descripción: retorna una sola lista con cada uno de los elementos
+% Descripcion: retorna una sola lista con cada uno de los elementos
 %              de las dos lista recibidads.
 % Entradas: dos listas.
 % Salidas: una lista.
@@ -77,7 +77,7 @@ concatenar([Cabeza|Lista1], Lista2, [Cabeza|Lista3]) :- concatenar(Lista1, Lista
 
 
 % Nombre: Ruta.
-% Descripción: retorna una posible ruta entre los dos lugares recibidos.
+% Descripcion: retorna una posible ruta entre los dos lugares recibidos.
 % Entradas: dos caracteres, dos variables.
 % Salidas: un entero y una lista.
 ruta(Inicio, Fin, Distancia, Camino) :- ruta(Inicio, Fin, Distancia, [], Camino).
@@ -94,8 +94,8 @@ ruta(Inicio, Intermedio, Distancia, Visitados, [Inicio|Cola]) :-
                      Distancia is Distancia1 + Distancia2.
 
 
-% Nombre: Ruta Más Corta.
-% Descripción: retorna la ruta ruta más corta entre los dos lugares
+% Nombre: Ruta Mas Corta.
+% Descripcion: retorna la ruta ruta mas corta entre los dos lugares
 %              recibidos.
 % Entradas: dos caracteres y dos variables.
 % Salidas: un entero y una lista.
@@ -110,24 +110,41 @@ rutaMasCorta(Inicio, Fin, CostoMinimo, Camino, CaminoFinal) :-
                                     CaminoFinal = ListaConcatenada.
 
 
+% Nombre: Calcular Tiempo
+% Descripcion: retorna el tiempo que tarda una ruta especifica.
+% Entradas: Una lista que representa el recorrido.
+% Salidas: Un entero que representa el tiempo que tardarÃ¡ el
+%          recorrido sin presas.
+calcularTiempo(L, 0) :- longitud(L, 1).
 
-
-
-
-
-
-
-
-cacularTiempo([Cabeza|Cola], Tiempo) :- calcularTiempo(Cabeza, Cola, Tiempo).
+calcularTiempo([Cabeza|Cola], Tiempo) :- calcularTiempo(Cabeza, Cola, Tiempo).
 
 calcularTiempo(Cabeza1, [Cabeza2|Cola], Tiempo) :-
-                                 tiempo(Cabeza1, Cabeza2, Duracion),
-                                 Suma = Tiempo + Duracion,
-                                 calcularTiempo(Cabeza2, Cola, Suma).
+                                tiempo(Cabeza1, Cabeza2, Duracion),
+                                write(Duracion),nl,
+                                calcularTiempo([Cabeza2|Cola], Suma),
+                                Tiempo is Suma+Duracion.
 
+% Nombre: Calcular Tiempo Presas.
+% Descripcion: retorna el tiempo que tarda una ruta especifica con presas.
+% Entradas: Una lista que representa el recorrido.
+% Salidas: Un entero que representa el tiempo que tardarÃ¡ el
+%          recorrido con presas.
+calcularTiempoPresas(L, 0) :- longitud(L, 1).
 
+calcularTiempoPresas([Cabeza|Cola], Tiempo) :- calcularTiempoPresas(Cabeza, Cola, Tiempo).
 
+calcularTiempoPresas(Cabeza1, [Cabeza2|Cola], Tiempo) :-
+                                tiempoPresa(Cabeza1, Cabeza2, Duracion),
+                                write(Duracion),nl,
+                                calcularTiempoPresas([Cabeza2|Cola], Suma),
+                                Tiempo is Suma+Duracion.
 
-
-
-
+% Nombre: Longitud (FunciÃ³n auxiliar)
+% Descripcion: Determina la longitud de una lista.
+% Entradas: Una lista.
+% Salidas: La longitud de esta lista.
+longitud([], 0).
+longitud([_|L], Val):-
+    longitud(L, Val1),
+    Val is Val1+1.
