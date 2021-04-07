@@ -115,6 +115,15 @@ rutaMasCorta(Inicio, Fin, CostoMinimo, Camino, CaminoFinal) :-
 
 
 
+longitud1([], 0).
+longitud1([_|Tail], Cantidad):- longitud1(Tail, Suma), Cantidad is Suma + 1.
+
+
+
+
+
+
+
 
 
 
