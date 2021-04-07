@@ -218,3 +218,33 @@ calcularTiempoPresas(Cabeza1, [Cabeza2|Cola], Tiempo) :-
                                                tiempoPresa(Cabeza1, Cabeza2, Duracion),
                                                calcularTiempoPresas([Cabeza2|Cola], Suma),
                                                Tiempo is Suma + Duracion.
+
+
+
+
+
+
+
+obtenerRutaCostoTiempos(L, [], 0, 0, 0) :- longitud(L, 1).
+
+obtenerRutaCostoTiempos([Cabeza|Cola], CaminoFinal, Costo, Tiempo, TiempoPresas) :-
+                     obtenerRutaCostoTiempos(Cabeza, Cola, CaminoFinal, Costo, Tiempo, TiempoPresas).
+
+obtenerRutaCostoTiempos(Cabeza1, [Cabeza2|Cola], CaminoFinal, Costo, Tiempo, TiempoPresas) :-
+
+                    rutaMasCorta(Cabeza1, Cabeza2 , Costo1, Camino1),
+                    tiempo(Cabeza1, Cabeza2, Tiempo1),
+                    tiempoPresa(Cabeza1, Cabeza2, Tiempo2),
+                    obtenerRutaCostoTiempos([Cabeza2|Cola], Camino2, Costo2, Tiempo3, TiempoPresas1),
+
+                    concatenar(Camino1, Camino2, ListaConcatenada),
+                    CaminoFinal = ListaConcatenada,
+
+                    Costo is Costo1 + Costo2,
+
+                    Tiempo is Tiempo1 + Tiempo3,
+
+                    TiempoPresas is Tiempo2 + TiempoPresas1.
+
+
+
