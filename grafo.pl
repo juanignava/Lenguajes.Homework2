@@ -189,7 +189,7 @@ rutaMasCorta(Inicio, Fin, CostoMinimo, Camino, CaminoFinal) :-
 longitud([], 0).
 
 longitud([_|L], Val):- longitud(L, Val1),
-                       Val is Val1+1.
+                       Val is Val1 + 1.
 
 
 % Nombre: Calcular Tiempo
@@ -206,6 +206,7 @@ calcularTiempo(Cabeza1, [Cabeza2|Cola], Tiempo) :-
                                          calcularTiempo([Cabeza2|Cola], Suma),
                                          Tiempo is Suma + Duracion.
 
+
 % Nombre: Calcular Tiempo Presas.
 % Descripcion: retorna el tiempo que tarda una ruta especifica con presas.
 % Entradas: Una lista que representa el recorrido.
@@ -220,16 +221,17 @@ calcularTiempoPresas(Cabeza1, [Cabeza2|Cola], Tiempo) :-
                                                calcularTiempoPresas([Cabeza2|Cola], Suma),
                                                Tiempo is Suma + Duracion.
 
-
-obtenerRuta(L, L, 0):- 
-    longitud(L, 1).
-%obtenerRuta([], Camino, 0).
+% Nombre: Obtener Ruta.
+% Descripcion: retorna la ruta y el costo final del camino recibido.
+% Entradas: Una lista y dos variables.
+% Salidas: Una lista y un entero.
+obtenerRuta(L, L, 0):- longitud(L, 1).
 
 obtenerRuta([Cabeza|Cola], CaminoFinal, Costo) :-
-    obtenerRuta(Cabeza, Cola, CaminoFinal, Costo).
+                                            obtenerRuta(Cabeza, Cola, CaminoFinal, Costo).
 
 obtenerRuta(Cabeza1, [Cabeza2|Cola], CaminoFinal, Costo):-
-    rutaMasCorta(Cabeza1, Cabeza2, CostoInt, CaminoInt),
-    obtenerRuta([Cabeza2|Cola], CaminoFinal1, Costo1),
-    Costo is Costo1+CostoInt,
-    concatenar(CaminoInt,CaminoFinal1,CaminoFinal).
+                                      rutaMasCorta(Cabeza1, Cabeza2, CostoInt, CaminoInt),
+                                      obtenerRuta([Cabeza2|Cola], CaminoFinal1, Costo1),
+                                      Costo is Costo1 + CostoInt,
+                                      concatenar(CaminoInt, CaminoFinal1, CaminoFinal).
