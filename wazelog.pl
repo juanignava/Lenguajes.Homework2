@@ -1,7 +1,7 @@
-% Definicion de los arcos, tiempos y tiempos en presa que representan el
-% grafo.
 
-% arco(lugar1, lugar2, distancia en Km).
+% Definicion de los hechos del grafo (arcos, ciudades y tiempo)
+
+% arco(Lugar1, Lugar2, DistanciaEntrelugares). * la distancia en km.
 arco("sanjose", "cartago", 20).
 arco("sanjose", "corralillo", 22).
 
@@ -45,9 +45,7 @@ arco("juanvinas", "turrialba", 4).
 arco("turrialba", "cachi", 40).
 arco("turrialba", "pacayas", 18).
 
-
-% Definicion de los tiempos estimados.
-% tiempo(lugar1, lugar2, tiempo en minutos).
+% tiempo(Lugar1, Lugar2, Tiempo). * el tiempo en minutos.
 tiempo("sanjose", "cartago", 20).
 tiempo("sanjose", "corralillo", 22).
 
@@ -91,9 +89,7 @@ tiempo("juanvinas", "turrialba", 4).
 tiempo("turrialba", "cachi", 40).
 tiempo("turrialba", "pacayas", 18).
 
-
-% Definicion de los tiempos estimados en presas.
-% tiempoPresa(lugar1, lugar2, tiempo en minutos).
+% tiempoPresa(Lugar1, Lugar2, TiempoPresa). * el tiempo en minutos.
 tiempoPresa("sanjose", "cartago", 40).
 tiempoPresa("sanjose", "corralillo", 44).
 
@@ -137,9 +133,10 @@ tiempoPresa("juanvinas", "turrialba", 8).
 tiempoPresa("turrialba", "cachi", 80).
 tiempoPresa("turrialba", "pacayas", 36).
 
-
-
-% Definimos las ciudades del grafo (estos valores se cambiarán luego).
+% ciudad(VarianteNombre, Nombre)
+% VarianteNombre: es una variante que se puede encontrar en el programa.
+% (solamente hace el programa mas versatil).
+% Nombre: nombre de la ciudad sin variante.
 ciudad("cartago.", "cartago").
 ciudad("cartago,", "cartago").
 ciudad("cartago", "cartago").
@@ -188,163 +185,163 @@ ciudad("orosi.", "orosi").
 ciudad("orosi,", "orosi").
 ciudad("orosi", "orosi").
 
-% definimos las posibles respuestas afirmativas.
+% afirmativo(Respuesta)
+% Respuesta: posible respuesta afirmativa del usuario.
 afirmativo("si.").
 afirmativo("si,").
 afirmativo("si").
 afirmativo("sí").
 
-% posibles respuestas negativas.
+% negativo(Respuesta)
+% Respuesta: posible respuesta negativa del usuario.
 negativo("no").
 negativo("no.").
 negativo("no,").
 negativo("ninguno").
 
-% inicio de la aplicación, da la bienvenida al jugador y le pregunta por su destino.
-waze:-
-    write("Bienvenido a wazelog, por favor indique el lugar al que se dirige: "),
-    b_setval(lista_intermedios, []),
-    b_setval(lista_recorridos, []),
-    nl,
-    read(X),
-    string_lower(X, S),
-    split_string(S, " ", "", L),
-    obtener_ciudad(L, C),    
-    confirmar_destino(C).
+% Reglas de la interfaz.
 
-% Confimación del destino, is no se reconoce la ciudad entonces se devuelve a la regla waze.
-confirmar_destino(Destiny):-
-    ciudad(Destiny, X),
-    b_setval(destiny, X),
-    waze_from, 
+% Nombre: wazelog.
+% Descripcion: pregunta al usuario por su destino y divide el mensaje en una
+% lista de palabras para revisarlo.
+wazelog:-
+    write("Bienvenido a wazelog, por favor indique el lugar al que se dirige: "),nl,
+    b_setval(listaIntermedios, []),
+    b_setval(listaRecorridos, []),
+    read(OracionDestino),
+    string_lower(OracionDestino, OracionDestinoMin),
+    split_string(OracionDestinoMin, " ", "", ListaPalabrasDestino),
+    obtenerCiudad(ListaPalabrasDestino, Destino),
+    confirmarDestino(Destino).
+
+% Nombre: confirmar destino.
+% Descripcion: confirma si el destino ingresado corresponde a una ciudad.
+confirmarDestino(Destiny):-
+    ciudad(Destiny, Ciudad),
+    b_setval(destino, Ciudad),
+    wazelogPartida, 
     !.
-confirmar_destino(Destiny):- 
+confirmarDestino(Destiny):- 
     string_concat("Lo sentimos, el destino ", Destiny, Alert),
     write(Alert),
     nl,
-    waze.
+    wazelog.
 
-% Regla que pregunta el lugar donde inicia el viaje.
-waze_from:-
+% Nombre: wazelog Partida.
+% Descripcion: pregunta al usuario por su punto de partida y divide el mensaje en una
+% lista de palabras para revisarlo.
+wazelogPartida:-
     nl,
-    write("Por favor indique el lugar donde empieza el viaje: "),
-    nl,
-    read(X),
-    string_lower(X, S),
-    split_string(S, " ", "", L),
-    obtener_ciudad(L, C),
-    confirmar_partida(C).
+    write("Por favor indique el lugar donde empieza el viaje: "),nl,
+    read(OracionPartida),
+    string_lower(OracionPartida, OracionPartidaMin),
+    split_string(OracionPartidaMin, " ", "", ListaOracion),
+    obtenerCiudad(ListaOracion, Partida),
+    confirmarPartida(Partida).
 
-% Reglas de confirmación de partida.
-% Determinan si el lugar de partida es válido, si no entonces 
-% vuelve a preguntar desde la regla waze_from.
-confirmar_partida(Partida):-
-    b_getval(destiny, Destiny),
-    Partida == Destiny,
+% Nombre: Confirmar Partida.
+% Descripcion: confirma si el punto de partida corresponde a una ciudad.
+confirmarPartida(Partida):-
+    b_getval(destino, Destino),
+    Partida == Destino,
     write("Error, el lugar de partida no puede ser igual a su destino"),
     nl,
-    waze_from,
+    wazelogPartida,
     !.
-
-confirmar_partida(Partida):-
-    ciudad(Partida, X),
-    b_setval(partida, X),
-    waze_intermediate,
+confirmarPartida(Partida):-
+    ciudad(Partida, Ciudad),
+    b_setval(partida, Ciudad),
+    wazelogIntermedio,
     !.
-
-confirmar_partida(Partida):-
-    string_concat("Lo sentimos, el lugar de partida ", Partida, Alert),
-    write(Alert),
+confirmarPartida(Partida):-
+    string_concat("Lo sentimos, el lugar de partida ", Partida, Alerta),
+    write(Alerta),
     nl,
-    waze_from.
+    wazelogPartida.
 
-% Regla de los lugares intermedios
-% Le pregunta al usuario si tiene algún destino intermedio.
-waze_intermediate:-
+% Nombre: wazelog Intermedio.
+% Descripcion: pregunta al usuario por si tiene algun detino intermedio
+% y valida si el ligar corresponde a una ciudad valida.
+wazelogIntermedio:-
     nl,
     write("Algun (otro) destino intermedio?"),
     nl,
-    read(X),
-    string_lower(X, S),
-    split_string(S, " ", "", L),
-    obtener_respuesta(L, C),
-    confirmar_respuesta(C).
+    read(OracionIntermedio),
+    string_lower(OracionIntermedio, OracionIntermedioMin),
+    split_string(OracionIntermedioMin, " ", "", ListaIntermedio),
+    obtenerRespuesta(ListaIntermedio, Intermedio),
+    confirmarRespuesta(Intermedio).
 
-% Reglas de confirmación de respuesta
-% Determinan si el usuario tiene destinos intermedios.
-confirmar_respuesta(Respuesta):-
+% Nombre: Confirmar Respueta.
+% Descripcion: confirma si la respuesta a la pregunta es afirmativa o
+% negativa.
+confirmarRespuesta(Respuesta):-
     afirmativo(Respuesta),
     nl,
     write("Cual es el detino intermedio?"),
     nl,
-    read(X),
-    string_lower(X, S),
-    split_string(S, " ", "", L),
-    obtener_ciudad(L, C),
+    read(OracionIntermedio),
+    string_lower(OracionIntermedio, OracionIntermedioMin),
+    split_string(OracionIntermedioMin, " ", "", ListaIntermedio),
+    obtenerCiudad(ListaIntermedio, Ciudad),
     nl,
-    confirmar_intermedio(C),
+    confirmarIntermedio(Ciudad),
     !.
-
-confirmar_respuesta(Respuesta):-
+confirmarRespuesta(Respuesta):-
     negativo(Respuesta),
-    waze_final,
+    wazelogFinal,
     !.
-
-confirmar_respuesta(Respuesta):-
+confirmarRespuesta(Respuesta):-
     string_concat(Respuesta, ", por favor responda si o no", Alert),
     write(Alert),
     nl,
-    waze_intermediate.
+    wazelogIntermedio.
 
-% Reglas de confirmación del destino intermedio.
-% Definen si el detino ingresado existe o no.
-confirmar_intermedio(Inter):-
-    b_getval(destiny, Destiny),
-    Inter == Destiny,
+% Nombre: Confirmar Intermedio.
+% Descripcion: Determina si el lugar es ingresado ya fue tomado en cuenta como destino,
+% como partida u otro intermedio.
+confirmarIntermedio(Inter):-
+    b_getval(destino, Destino),
+    Inter == Destino,
     write("Error: el lugar intermedio no puede ser igual a su destino."),
     nl,
-    waze_intermediate,
+    wazelogIntermedio,
     !.
-
-confirmar_intermedio(Inter):-
+confirmarIntermedio(Inter):-
     b_getval(partida, Partida),
     Inter == Partida,
     write("Error: el lugar intermedio no puede ser igual a su lugar de partida."),
     nl,
-    waze_intermediate,
+    wazelogIntermedio,
     !.
-
-confirmar_intermedio(Inter):-
-    b_getval(lista_intermedios, L),
+confirmarIntermedio(Inter):-
+    b_getval(listaIntermedios, L),
     member(Inter, L),
     write("Error: el lugar intermedio ya fue tomado en cuenta"),
     nl,
-    waze_intermediate,
+    wazelogIntermedio,
     !.
-
-confirmar_intermedio(Inter):-
+confirmarIntermedio(Inter):-
     ciudad(Inter, I),
-    b_getval(lista_intermedios, L),
-    append(L, [I], X),
-    b_setval(lista_intermedios, X),
-    waze_intermediate,
+    b_getval(listaIntermedios, Lista),
+    append(Lista, [I], ListaNueva),
+    b_setval(listaIntermedios, ListaNueva),
+    wazelogIntermedio,
     !.
-
-confirmar_intermedio(Inter):-
-    string_concat("Lo sentimos su lugar intermedio ", Inter, Alert),
-    write(Alert),
-    nl,
-    waze_intermediate.
+confirmarIntermedio(Inter):-
+    string_concat("Lo sentimos su lugar intermedio ", Inter, Alerta),
+    write(Alerta),nl,
+    wazelogIntermedio.
 
 % Regla final del programa.
 % Se crea la lista ruta que el usuario determinó.
-waze_final:-
-    b_getval(destiny, Destiny),
+wazelogFinal:-
+    b_getval(destino, Destino),
     b_getval(partida, Partida),
-    b_getval(lista_intermedios, L),
-    append([Partida], L, X),
-    append(X, [Destiny], Result),
-    obtenerRuta(Result, Camino, Costo),
+    b_getval(listaIntermedios, Lista),
+    append([Partida], Lista, X),
+    append(X, [Destino], Resultado),
+    obtenerRuta(Resultado, Camino, Costo),
     calcularTiempo(Camino, Tiempo),
     calcularTiempoPresas(Camino, TiempoPresas),
     atomic_list_concat(Camino, ' -> ', Atom),
@@ -359,27 +356,29 @@ waze_final:-
     write(TiempoPresas),nl,nl,
     write("Muchs gracias por usar wazelog").
 
-% Regla de obtener ciudad.
+% Nombre: obtener ciudad.
 % Reconoce el nombre de una ciudad en las oraciones que el usuario
 % ingresa en las preguntas.
-obtener_ciudad([X|_], C):- ciudad(C, _), C==X, !.
-obtener_ciudad([], "no existe").
-obtener_ciudad([_|List], C):- 
-    obtener_ciudad(List, C).
+% obtenerCiudad(Oracion, Ciudad)
+obtenerCiudad([X|_], C):- ciudad(C, _), C==X, !.
+obtenerCiudad([], "no existe").
+obtenerCiudad([_|List], C):- 
+    obtenerCiudad(List, C).
 
-% Regla de obtener respuesta, reconoce las posible respuestas afirmativas o negativas del
+% Nombre: Obtener Respuesta.
+% Reconoce las posible respuestas afirmativas o negativas del
 % usuario en las preguntas.
-obtener_respuesta([X|_], R):- afirmativo(R), R==X, !.
-obtener_respuesta([X|_], R):- negativo(R), R==X, !.
-obtener_respuesta([], "Respuesta no valida").
-obtener_respuesta([_|List], R):-
-    obtener_respuesta(List, R).
+% obtenerRespuesta(Oracion, Respuesta).
+obtenerRespuesta([X|_], R):- afirmativo(R), R==X, !.
+obtenerRespuesta([X|_], R):- negativo(R), R==X, !.
+obtenerRespuesta([], "Respuesta no valida").
+obtenerRespuesta([_|List], R):-
+    obtenerRespuesta(List, R).
 
 % Nombre: Concatenar.
 % Descripcion: retorna una sola lista con cada uno de los elementos
-%              de las dos lista recibidads.
-% Entradas: dos listas.
-% Salidas: una lista.
+% de las dos lista recibidads.
+% concatenar(Lista1, Lista2, Lista3). * con Lista3 = Lista1 + Lista 2 concatenadas.
 concatenar([], Lista, Lista).
 concatenar([Cabeza|Lista1], Lista2, [Cabeza|Lista3]) :- concatenar(Lista1, Lista2, Lista3).
 
@@ -404,7 +403,7 @@ ruta(Inicio, Intermedio, Distancia, Visitados, [Inicio|Cola]) :-
 
 % Nombre: Ruta Mas Corta.
 % Descripcion: retorna la ruta ruta mas corta entre los dos lugares
-%              recibidos.
+% recibidos.
 % Entradas: dos caracteres y dos variables.
 % Salidas: un entero y una lista.
 rutaMasCorta(Inicio, Fin, Costo, Camino) :- rutaMasCorta(Inicio, Fin, Costo, _, Camino).
@@ -419,10 +418,9 @@ rutaMasCorta(Inicio, Fin, CostoMinimo, Camino, CaminoFinal) :-
                                     CaminoFinal = Camino.
 
 
-% Nombre: Longitud (Funci�n auxiliar)
+% Nombre: Longitud (Funcion auxiliar)
 % Descripcion: Determina la longitud de una lista.
-% Entradas: Una lista.
-% Salidas: a longitud de esta lista.
+%longitud(Lista, LongitudDeLista)
 longitud([], 0).
 
 longitud([_|L], Val):- longitud(L, Val1),
@@ -430,10 +428,9 @@ longitud([_|L], Val):- longitud(L, Val1),
 
 
 % Nombre: Calcular Tiempo
-% Descripcion: retorna el tiempo que tarda una ruta especifica.
-% Entradas: Una lista que representa el recorrido.
-% Salidas: Un entero que representa el tiempo que tardar� el
-%          recorrido sin presas.
+% Descripcion: retorna el tiempo que tarda un recorrido especifico
+% ingresado como lista.
+% calcularTiempo(ListaDeREcorrido, TiempoRecorrido)
 calcularTiempo(L, 0) :- longitud(L, 1).
 
 calcularTiempo([Cabeza|Cola], Tiempo) :- calcularTiempo(Cabeza, Cola, Tiempo).
@@ -445,9 +442,7 @@ calcularTiempo(Cabeza1, [Cabeza2|Cola], Tiempo) :-
 
 % Nombre: Calcular Tiempo Presas.
 % Descripcion: retorna el tiempo que tarda una ruta especifica con presas.
-% Entradas: Una lista que representa el recorrido.
-% Salidas: Un entero que representa el tiempo que tardar� el
-%          recorrido con presas.
+% calcularTiempoPresas(ListaRecorrido, TiempoPresas)
 calcularTiempoPresas(L, 0) :- longitud(L, 1).
 
 calcularTiempoPresas([Cabeza|Cola], Tiempo) :- calcularTiempoPresas(Cabeza, Cola, Tiempo).
@@ -459,8 +454,7 @@ calcularTiempoPresas(Cabeza1, [Cabeza2|Cola], Tiempo) :-
 
 % Nombre: Obtener Ruta.
 % Descripcion: retorna la ruta y el costo final del camino recibido.
-% Entradas: Una lista y dos variables.
-% Salidas: Una lista y un entero.
+% obtenerRuta(ListaDeDestinos, RutaMasCorta, Distancia).
 obtenerRuta(L, L, 0):- 
     longitud(L, 1).
 
