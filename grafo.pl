@@ -26,7 +26,7 @@ arco(musgoVerde, cartago, 10).
 
 arco(cervantes, pacayas, 8).
 arco(cervantes, cachi, 7).
-arco(cervantes, juanViñas, 5).
+arco(cervantes, juanViï¿½as, 5).
 
 arco(paraiso, cervantes, 4).
 arco(paraiso, cachi, 10).
@@ -40,7 +40,7 @@ arco(cachi, turrialba, 40).
 arco(orosi, paraiso, 8).
 arco(orosi, cachi, 12).
 
-arco(juanViñas, turrialba, 4).
+arco(juanViï¿½as, turrialba, 4).
 
 arco(turrialba, cachi, 40).
 arco(turrialba, pacayas, 18).
@@ -72,7 +72,7 @@ tiempo(musgoVerde, cartago, 10).
 
 tiempo(cervantes, pacayas, 8).
 tiempo(cervantes, cachi, 7).
-tiempo(cervantes, juanViñas, 5).
+tiempo(cervantes, juanViï¿½as, 5).
 
 tiempo(paraiso, cervantes, 4).
 tiempo(paraiso, cachi, 10).
@@ -86,7 +86,7 @@ tiempo(cachi, turrialba, 40).
 tiempo(orosi, paraiso, 8).
 tiempo(orosi, cachi, 12).
 
-tiempo(juanViñas, turrialba, 4).
+tiempo(juanViï¿½as, turrialba, 4).
 
 tiempo(turrialba, cachi, 40).
 tiempo(turrialba, pacayas, 18).
@@ -118,7 +118,7 @@ tiempoPresa(musgoVerde, cartago, 20).
 
 tiempoPresa(cervantes, pacayas, 16).
 tiempoPresa(cervantes, cachi, 14).
-tiempoPresa(cervantes, juanViñas, 10).
+tiempoPresa(cervantes, juanViï¿½as, 10).
 
 tiempoPresa(paraiso, cervantes, 8).
 tiempoPresa(paraiso, cachi, 20).
@@ -132,7 +132,7 @@ tiempoPresa(cachi, turrialba, 80).
 tiempoPresa(orosi, paraiso, 16).
 tiempoPresa(orosi, cachi, 24).
 
-tiempoPresa(juanViñas, turrialba, 8).
+tiempoPresa(juanViï¿½as, turrialba, 8).
 
 tiempoPresa(turrialba, cachi, 80).
 tiempoPresa(turrialba, pacayas, 36).
@@ -177,11 +177,12 @@ rutaMasCorta(Inicio, Fin, CostoMinimo, Camino, CaminoFinal) :-
                                     \+ (ruta(Inicio, Fin, CostoBajo, OtroCamino),
                                     OtroCamino \= Camino,
                                     CostoBajo =< CostoMinimo),
-                                    concatenar(Camino, [Fin], ListaConcatenada),
-                                    CaminoFinal = ListaConcatenada.
+                                    %concatenar(Camino, [Fin], ListaConcatenada),
+                                    %CaminoFinal = ListaConcatenada.
+                                    CaminoFinal = Camino.
 
 
-% Nombre: Longitud (Función auxiliar)
+% Nombre: Longitud (Funciï¿½n auxiliar)
 % Descripcion: Determina la longitud de una lista.
 % Entradas: Una lista.
 % Salidas: a longitud de esta lista.
@@ -194,7 +195,7 @@ longitud([_|L], Val):- longitud(L, Val1),
 % Nombre: Calcular Tiempo
 % Descripcion: retorna el tiempo que tarda una ruta especifica.
 % Entradas: Una lista que representa el recorrido.
-% Salidas: Un entero que representa el tiempo que tardará el
+% Salidas: Un entero que representa el tiempo que tardarï¿½ el
 %          recorrido sin presas.
 calcularTiempo(L, 0) :- longitud(L, 1).
 
@@ -208,7 +209,7 @@ calcularTiempo(Cabeza1, [Cabeza2|Cola], Tiempo) :-
 % Nombre: Calcular Tiempo Presas.
 % Descripcion: retorna el tiempo que tarda una ruta especifica con presas.
 % Entradas: Una lista que representa el recorrido.
-% Salidas: Un entero que representa el tiempo que tardará el
+% Salidas: Un entero que representa el tiempo que tardarï¿½ el
 %          recorrido con presas.
 calcularTiempoPresas(L, 0) :- longitud(L, 1).
 
@@ -220,7 +221,18 @@ calcularTiempoPresas(Cabeza1, [Cabeza2|Cola], Tiempo) :-
                                                Tiempo is Suma + Duracion.
 
 
+obtenerRuta(L, [], 0):- longitud(L, 1).
 
+%obtenerRuta([], [], 0).
+
+obtenerRuta([Cabeza|Cola], CaminoFinal, Costo) :-
+    obtenerRuta(Cabeza, Cola, CaminoFinal, Costo).
+
+obtenerRuta(Cabeza1, [Cabeza2|Cola], CaminoFinal, Costo):-
+    rutaMasCorta(Cabeza1, Cabeza2, CostoInt, CaminoInt),
+    obtenerRuta([Cabeza2|Cola], CaminoFinal1, Costo1),
+    Costo is Costo1+CostoInt,
+    concatenar(CaminoInt,CaminoFinal1,CaminoFinal).
 
 
 
