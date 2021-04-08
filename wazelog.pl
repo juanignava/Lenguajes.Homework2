@@ -457,10 +457,12 @@ calcularTiempoPresas(Cabeza1, [Cabeza2|Cola], Tiempo) :-
                                                calcularTiempoPresas([Cabeza2|Cola], Suma),
                                                Tiempo is Suma + Duracion.
 
-
+% Nombre: Obtener Ruta.
+% Descripcion: retorna la ruta y el costo final del camino recibido.
+% Entradas: Una lista y dos variables.
+% Salidas: Una lista y un entero.
 obtenerRuta(L, L, 0):- 
     longitud(L, 1).
-%obtenerRuta([], Camino, 0).
 
 obtenerRuta([Cabeza|Cola], CaminoFinal, Costo) :-
     obtenerRuta(Cabeza, Cola, CaminoFinal, Costo).
