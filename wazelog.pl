@@ -546,6 +546,7 @@ verbo1(["quiero_ir"|S], S).
 verbo1(["camino"|S], S).
 verbo1(["estoy"|S], S).
 verbo1(["queda"|S], S).
+verbo1(["empieza"|S], S).
 
 % Nombre: complemento.
 % Descripcion: determina el articulo y sustantivo de un complemento.
