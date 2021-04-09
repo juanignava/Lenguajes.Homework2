@@ -211,7 +211,25 @@ wazelog:-
     read(OracionDestino),
     string_lower(OracionDestino, OracionDestinoMin),
     split_string(OracionDestinoMin, " ", "", ListaPalabrasDestino),
+    determinarDestino(ListaPalabrasDestino).
+
+    %obtenerCiudad(ListaPalabrasDestino, Destino),
+    %confirmarDestino(Destino).
+
+determinarDestino(ListaPalabras):-
+    oracion1(ListaPalabras, [], L),
+    string_concat("A donde se ubica el/la ", L, X),
+    string_concat(X, "?", Result),
+    write(Result),nl,
+    read(OracionDestino),
+    string_lower(OracionDestino, OracionDestinoMin),
+    split_string(OracionDestinoMin, " ", "", ListaPalabrasDestino),
     obtenerCiudad(ListaPalabrasDestino, Destino),
+    confirmarDestino(Destino),
+    !.
+
+determinarDestino(ListaPalabras):-
+    obtenerCiudad(ListaPalabras, Destino),
     confirmarDestino(Destino).
 
 % Nombre: confirmar destino.
@@ -236,7 +254,24 @@ wazelogPartida:-
     read(OracionPartida),
     string_lower(OracionPartida, OracionPartidaMin),
     split_string(OracionPartidaMin, " ", "", ListaOracion),
-    obtenerCiudad(ListaOracion, Partida),
+    determinarPartida(ListaOracion).
+    %obtenerCiudad(ListaOracion, Partida),
+    %confirmarPartida(Partida).
+
+determinarPartida(ListaPalabras):-
+    oracion1(ListaPalabras, [], L),
+    string_concat("A donde se ubica el/la ", L, X),
+    string_concat(X, "?", Result),
+    write(Result),nl,
+    read(OracionPartida),
+    string_lower(OracionPartida, OracionPartidaMin),
+    split_string(OracionPartidaMin, " ", "", ListaPalabrasPartida),
+    obtenerCiudad(ListaPalabrasPartida, Partida),
+    confirmarPartida(Partida),
+    !.
+
+determinarPartida(ListaPalabras):-
+    obtenerCiudad(ListaPalabras, Partida),
     confirmarPartida(Partida).
 
 % Nombre: Confirmar Partida.
@@ -283,19 +318,37 @@ confirmarRespuesta(Respuesta):-
     read(OracionIntermedio),
     string_lower(OracionIntermedio, OracionIntermedioMin),
     split_string(OracionIntermedioMin, " ", "", ListaIntermedio),
-    obtenerCiudad(ListaIntermedio, Ciudad),
-    nl,
-    confirmarIntermedio(Ciudad),
+    determinarIntermedio(ListaIntermedio),
+    %obtenerCiudad(ListaIntermedio, Ciudad),
+    %confirmarIntermedio(Ciudad),
     !.
+
 confirmarRespuesta(Respuesta):-
     negativo(Respuesta),
     wazelogFinal,
     !.
+
 confirmarRespuesta(Respuesta):-
     string_concat(Respuesta, ", por favor responda si o no", Alert),
     write(Alert),
     nl,
     wazelogIntermedio.
+
+determinarIntermedio(ListaPalabras):-
+    oracion1(ListaPalabras, [], L),
+    string_concat("A donde se ubica el/la ", L, X),
+    string_concat(X, "?", Result),
+    write(Result),nl,
+    read(OracionIntermedio),
+    string_lower(OracionIntermedio, OracionIntermedioMin),
+    split_string(OracionIntermedioMin, " ", "", ListaPalabrasIntermedio),
+    obtenerCiudad(ListaPalabrasIntermedio, Intermedio),
+    confirmarIntermedio(Intermedio),
+    !.
+
+determinarIntermedio(ListaPalabras):-
+    obtenerCiudad(ListaPalabras, Intermedio),
+    confirmarIntermedio(Intermedio).
 
 % Nombre: Confirmar Intermedio.
 % Descripcion: Determina si el lugar es ingresado ya fue tomado en cuenta como destino,
@@ -354,7 +407,7 @@ wazelogFinal:-
     write(Tiempo),nl,
     write("El tiempo que le tomaria el viaje con presas es: "),
     write(TiempoPresas),nl,nl,
-    write("Muchs gracias por usar wazelog").
+    write("Muchas gracias por usar wazelog").
 
 % Nombre: obtener ciudad.
 % Reconoce el nombre de una ciudad en las oraciones que el usuario
@@ -364,6 +417,36 @@ obtenerCiudad([X|_], C):- ciudad(C, _), C==X, !.
 obtenerCiudad([], "no existe").
 obtenerCiudad([_|List], C):- 
     obtenerCiudad(List, C).
+
+
+
+
+oracion1(S1, S, Lugar):- %sujeto1(S0, S1),
+    verbo1(S1, S2), 
+    complemento(S2, S, Lugar).
+
+sujeto1(["yo"|S], S).
+sujeto1(["me"|S], S).
+
+verbo1(["voy"|S], S).
+verbo1(["dirijo"|S], S).
+verbo1(["quiero_ir"|S], S).
+verbo1(["camino"|S], S).
+verbo1(["estoy"|S], S).
+verbo1(["queda"|S], S).
+
+complemento(S0, S, Lugar):- articulo(S0, [Lugar|S1]),
+    nombre([Lugar|S1], S).
+
+articulo(["al"|S], S).
+articulo(["a_la"|S], S).
+articulo(["a"|S], S).
+articulo(["en"|S], S).
+
+nombre(["super"|S], S).
+nombre(["casa"|S], S).
+nombre(["mall"|S], S).
+nombre(["hospital"|S], S).
 
 % Nombre: Obtener Respuesta.
 % Reconoce las posible respuestas afirmativas o negativas del
