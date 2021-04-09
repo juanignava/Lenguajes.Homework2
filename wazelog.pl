@@ -418,36 +418,6 @@ obtenerCiudad([], "no existe").
 obtenerCiudad([_|List], C):- 
     obtenerCiudad(List, C).
 
-
-
-
-oracion1(S1, S, Lugar):- %sujeto1(S0, S1),
-    verbo1(S1, S2), 
-    complemento(S2, S, Lugar).
-
-sujeto1(["yo"|S], S).
-sujeto1(["me"|S], S).
-
-verbo1(["voy"|S], S).
-verbo1(["dirijo"|S], S).
-verbo1(["quiero_ir"|S], S).
-verbo1(["camino"|S], S).
-verbo1(["estoy"|S], S).
-verbo1(["queda"|S], S).
-
-complemento(S0, S, Lugar):- articulo(S0, [Lugar|S1]),
-    nombre([Lugar|S1], S).
-
-articulo(["al"|S], S).
-articulo(["a_la"|S], S).
-articulo(["a"|S], S).
-articulo(["en"|S], S).
-
-nombre(["super"|S], S).
-nombre(["casa"|S], S).
-nombre(["mall"|S], S).
-nombre(["hospital"|S], S).
-
 % Nombre: Obtener Respuesta.
 % Reconoce las posible respuestas afirmativas o negativas del
 % usuario en las preguntas.
@@ -549,3 +519,47 @@ obtenerRuta(Cabeza1, [Cabeza2|Cola], CaminoFinal, Costo):-
     obtenerRuta([Cabeza2|Cola], CaminoFinal1, Costo1),
     Costo is Costo1+CostoInt,
     concatenar(CaminoInt,CaminoFinal1,CaminoFinal).
+
+% Analisis, gramaticas libres de contexto
+
+% Nombre: oracion
+% Descripcion: analiza si la oración contiene la sintaxis correcta.
+% oracion(ListaOracion, ListaSobrante, Lugar).
+% ListaOracion: oracion ingresada porel usuario.
+% ListaSobrante: palabras sobrantes de la oracion.
+% Lugar: Lugar que logra reconocer el sistema.
+oracion1(S1, S, Lugar):-
+    verbo1(S1, S2), 
+    complemento(S2, S, Lugar).
+oracion1(S0, S, Lugar):- sujeto1(S0, S1),
+    verbo1(S1, S2), 
+    complemento(S2, S, Lugar).
+
+% sujeto([PosibleSujeto|ListaSobrante], ListaSobrante).
+sujeto1(["yo"|S], S).
+sujeto1(["me"|S], S).
+
+% verbo([PosibleVerbo|ListaSobrante], ListaSobrante).
+verbo1(["voy"|S], S).
+verbo1(["dirijo"|S], S).
+verbo1(["quiero_ir"|S], S).
+verbo1(["camino"|S], S).
+verbo1(["estoy"|S], S).
+verbo1(["queda"|S], S).
+
+% Nombre: complemento.
+% Descripcion: determina el articulo y sustantivo de un complemento.
+complemento(S0, S, Lugar):- articulo(S0, [Lugar|S1]),
+    nombre([Lugar|S1], S).
+
+% articulo([PosibleArticulo|ListaSobrante], ListaSobrante).
+articulo(["al"|S], S).
+articulo(["a_la"|S], S).
+articulo(["a"|S], S).
+articulo(["en"|S], S).
+
+% nombre([PosibleNombre|ListaSobrante], ListaSobrante).
+nombre(["super"|S], S).
+nombre(["casa"|S], S).
+nombre(["mall"|S], S).
+nombre(["hospital"|S], S).
