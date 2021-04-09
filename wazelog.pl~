@@ -571,6 +571,9 @@ obtenerRuta(Cabeza1, [Cabeza2|Cola], CaminoFinal, Costo):-
                 concatenar(CaminoInt,CaminoFinal1,CaminoFinal).
 
 
+
+
+
 % Analisis sobre las gramaticas libres de contexto.
 
 % Nombre: Oracion 1.
@@ -592,7 +595,6 @@ oracion1(S0, S, Lugar):- sujeto1(S0, S1),
 sujeto1(["yo"|S], S).
 sujeto1(["me"|S], S).
 
-
 % verbo([PosibleVerbo|ListaSobrante], ListaSobrante).
 verbo1(["voy"|S], S).
 verbo1(["dirijo"|S], S).
@@ -602,19 +604,16 @@ verbo1(["estoy"|S], S).
 verbo1(["queda"|S], S).
 verbo1(["empieza"|S], S).
 
-
 % Nombre: complemento.
 % Descripcion: determina el articulo y sustantivo de un complemento.
 complemento(S0, S, Lugar):- articulo(S0, [Lugar|S1]),
     nombre([Lugar|S1], S).
-
 
 % articulo([PosibleArticulo|ListaSobrante], ListaSobrante).
 articulo(["al"|S], S).
 articulo(["a_la"|S], S).
 articulo(["a"|S], S).
 articulo(["en"|S], S).
-
 
 % nombre([PosibleNombre|ListaSobrante], ListaSobrante).
 nombre(["super"|S], S).
