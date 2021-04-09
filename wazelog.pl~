@@ -473,8 +473,6 @@ calcularTiempo(Cabeza1, [Cabeza2|Cola], Tiempo) :-
 
 % Nombre: Calcular Tiempo Presas.
 % Descripcion: retorna el tiempo que tarda una ruta especifica con presas.
-% Entradas: una lista y una variable.
-% Salidas: un entero.
 % calcularTiempoPresas(ListaRecorrido, TiempoPresas)
 calcularTiempoPresas(L, 0) :- longitud(L, 1).
 
@@ -489,13 +487,14 @@ calcularTiempoPresas(Cabeza1, [Cabeza2|Cola], Tiempo) :-
 % Nombre: Obtener Ruta.
 % Descripcion: retorna la ruta y el costo final del camino recibido.
 % obtenerRuta(ListaDeDestinos, RutaMasCorta, Distancia).
-obtenerRuta(L, L, 0):- longitud(L, 1).
+obtenerRuta(L, L, 0):-
+    longitud(L, 1).
 
 obtenerRuta([Cabeza|Cola], CaminoFinal, Costo) :-
-                      obtenerRuta(Cabeza, Cola, CaminoFinal, Costo).
+    obtenerRuta(Cabeza, Cola, CaminoFinal, Costo).
 
 obtenerRuta(Cabeza1, [Cabeza2|Cola], CaminoFinal, Costo):-
-                rutaMasCorta(Cabeza1, Cabeza2, CostoInt, CaminoInt),
-                obtenerRuta([Cabeza2|Cola], CaminoFinal1, Costo1),
-                Costo is Costo1 + CostoInt,
-                concatenar(CaminoInt,CaminoFinal1,CaminoFinal).
+    rutaMasCorta(Cabeza1, Cabeza2, CostoInt, CaminoInt),
+    obtenerRuta([Cabeza2|Cola], CaminoFinal1, Costo1),
+    Costo is Costo1+CostoInt,
+    concatenar(CaminoInt,CaminoFinal1,CaminoFinal).
